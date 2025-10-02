@@ -3,7 +3,8 @@ const db = require('./db');
 
 // Nossas rotas
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user'); // <-- Importa as rotas de usuário
+const userRoutes = require('./routes/user');
+const aulasRoutes = require('./routes/aulas'); // <-- Importa as rotas de aulas
 
 const app = express();
 const port = 3000;
@@ -13,7 +14,8 @@ app.use(express.json());
 
 // Configuração das Rotas
 app.use('/auth', authRoutes);
-app.use('/api/user', userRoutes); // <-- Usa as rotas de usuário com o prefixo /api/user
+app.use('/api/user', userRoutes);
+app.use('/api/aulas', aulasRoutes); // <-- Usa as rotas de aulas com o prefixo /api/aulas
 
 // Rota principal
 app.get('/', (req, res) => {
