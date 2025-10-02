@@ -4,7 +4,8 @@ const db = require('./db');
 // Nossas rotas
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-const aulasRoutes = require('./routes/aulas'); // <-- Importa as rotas de aulas
+const aulasRoutes = require('./routes/aulas');
+const agendamentosRoutes = require('./routes/agendamentos'); // <-- Importa as rotas de agendamentos
 
 const app = express();
 const port = 3000;
@@ -15,7 +16,8 @@ app.use(express.json());
 // Configuração das Rotas
 app.use('/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/aulas', aulasRoutes); // <-- Usa as rotas de aulas com o prefixo /api/aulas
+app.use('/api/aulas', aulasRoutes);
+app.use('/api/agendamentos', agendamentosRoutes); // <-- Usa as rotas de agendamentos
 
 // Rota principal
 app.get('/', (req, res) => {
