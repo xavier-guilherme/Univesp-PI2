@@ -1,0 +1,7 @@
+# Arquivo .gitignore
+
+# Ignorar arquivos de variáveis de ambiente
+.env
+
+# Ignorar pasta de dependências do Node
+node_modules
