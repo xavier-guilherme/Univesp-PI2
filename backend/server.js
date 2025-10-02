@@ -1,16 +1,19 @@
 const express = require('express');
 const db = require('./db');
-const authRoutes = require('./routes/auth'); // Importa nossas rotas de autenticação
+
+// Nossas rotas
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user'); // <-- Importa as rotas de usuário
 
 const app = express();
 const port = 3000;
 
-// Middleware para o Express entender JSON
+// Middlewares
 app.use(express.json());
 
-// Diz ao Express para usar o roteador de autenticação
-// Todas as rotas em auth.js terão o prefixo /auth
+// Configuração das Rotas
 app.use('/auth', authRoutes);
+app.use('/api/user', userRoutes); // <-- Usa as rotas de usuário com o prefixo /api/user
 
 // Rota principal
 app.get('/', (req, res) => {
