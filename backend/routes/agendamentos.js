@@ -59,4 +59,56 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
+// Rota GET para o usuário listar seus próprios agendamentos
+// URL: /api/agendamentos/meus-agendamentos
+router.get('/meus-agendamentos', verifyToken, async (req, res) => {
+  const usuario_id = req.user.userId;
+
+  try {
+    // Vamos buscar os agendamentos e juntar (JOIN) com os dados das aulas
+    const result = await db.query(
+      `SELECT a.id, a.nome, a.instrutor, a.data_hora, ag.id as agendamento_id
+       FROM aulas a
+       JOIN agendamentos ag ON a.id = ag.aula_id
+       WHERE ag.usuario_id = $1
+       ORDER BY a.data_hora ASC`,
+      [usuario_id]
+    );
+
+    res.status(200).json(result.rows);
+
+  } catch (err) {
+    console.error('Erro ao buscar meus agendamentos:', err.message);
+    res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
+
+// Rota DELETE para cancelar um agendamento
+// URL: /api/agendamentos/:id (onde :id é o ID do agendamento)
+router.delete('/:id', verifyToken, async (req, res) => {
+  const agendamento_id = req.params.id;
+  const usuario_id = req.user.userId;
+
+  try {
+    // Primeiro, vamos verificar se o agendamento existe e se pertence ao usuário logado
+    const agendamentoResult = await db.query(
+      'SELECT * FROM agendamentos WHERE id = $1 AND usuario_id = $2',
+      [agendamento_id, usuario_id]
+    );
+
+    if (agendamentoResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Agendamento não encontrado ou não pertence a você.' });
+    }
+
+    // Se o agendamento for válido, deletamos
+    await db.query('DELETE FROM agendamentos WHERE id = $1', [agendamento_id]);
+
+    res.status(200).json({ message: 'Agendamento cancelado com sucesso.' });
+
+  } catch (err) {
+    console.error('Erro ao cancelar agendamento:', err.message);
+    res.status(500).json({ error: 'Erro interno do servidor.' });
+  }
+});
+
 module.exports = router;
