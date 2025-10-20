@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const db = require('./db');
 
 // Nossas rotas
@@ -11,6 +12,7 @@ const app = express();
 const port = 3000;
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 
 // Configuração das Rotas
