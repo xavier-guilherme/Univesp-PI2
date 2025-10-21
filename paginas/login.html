@@ -1,50 +1,98 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<section class="pagina-conteudo login-page" data-aos="fade-up" id="Login" aria-labelledby="titulo-Login">
+  <div class="login-box">
+    <h2 id="titulo-Login">Login</h2>
+    
+    <div class="form-group">
+      <label for="email"><i class="bi bi-envelope-fill"></i> E-mail</label>
+      <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+    </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Canoa Caiçara</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
+    <div class="form-group">
+      <label for="senha"><i class="bi bi-lock-fill"></i> Senha</label>
+      <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
+    </div>
 
-<body>
-    <header class="main-header">
-        </header>
+    <!-- ⚠️ ONCLICK DIRETO NO BOTÃO -->
+    <button type="button" class="btn-login" onclick="fazerLogin()">Entrar</button>
+    <div id="error-message" style="color: red; margin-top: 10px; text-align: center;"></div>
 
-    <main class="container" style="padding-top: 100px; padding-bottom: 100px;">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-body">
-                        <h3 class="card-title text-center">Acessar minha conta</h3>
-                        
-                        <form id="login-form">
-                            <div class="form-group">
-                                <label for="email">Endereço de email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Seu email" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label for="senha">Senha</label>
-                                <input type="password" class="form-control" id="senha" placeholder="Senha" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block w-100 mt-4">Entrar</button>
-                        </form>
-                        
-                        <div id="error-message" class="text-center" style="color: red; margin-top: 15px;"></div>
+    <div class="login-links">
+      <a href="#">Esqueceu a senha?</a>
+      <a href="#">Criar uma conta</a>
+    </div>
+  </div>
+</section>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+<script>
+console.log('✅ Script de login carregado!');
 
-    <footer class="main-footer text-center mt-5">
-        </footer>
+// Função global para o onclick
+window.fazerLogin = async function() {
+  console.log('🔄 Função fazerLogin() chamada!');
+  
+  const email = document.getElementById('email').value;
+  const senha = document.getElementById('senha').value;
+  const errorMessage = document.getElementById('error-message');
+  const botao = event.target;
+  
+  if (!email || !senha) {
+    errorMessage.textContent = 'Por favor, preencha email e senha';
+    console.warn('⚠️ Campos vazios');
+    return;
+  }
+  
+  console.log('📧 Email:', email);
+  
+  botao.disabled = true;
+  botao.textContent = 'Entrando...';
+  errorMessage.textContent = '';
+  
+  try {
+    console.log('🌐 Enviando requisição para http://localhost:3000/auth/login');
+    
+    const response = await fetch('http://localhost:3000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
+    });
+    
+    console.log('📥 Status da resposta:', response.status);
+    
+    const data = await response.json();
+    console.log('📦 Dados recebidos:', data);
+    
+    if (response.ok) {
+      console.log('✅ Login bem-sucedido!');
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userName', data.nome);
+      alert('Login realizado com sucesso!\nUsuário: ' + data.nome);
+      
+      // Redireciona
+      console.log('🔀 Redirecionando para página de aulas...');
+      window.location.hash = '#!paginas/atividades/aulas.html';
+      setTimeout(() => location.reload(), 200);
+      
+    } else {
+      console.error('❌ Erro:', data.error);
+      errorMessage.textContent = data.error || 'Erro ao fazer login';
+      botao.disabled = false;
+      botao.textContent = 'Entrar';
+    }
+  } catch (error) {
+    console.error('💥 Erro completo:', error);
+    errorMessage.textContent = 'Erro ao conectar. Backend rodando na porta 3000?';
+    botao.disabled = false;
+    botao.textContent = 'Entrar';
+  }
+}
 
-    <script src="../js/bootstrap.bundle.js"></script>
-    <script src="../js/login.js"></script>
-</body>
+// Enter nos inputs
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && (e.target.id === 'email' || e.target.id === 'senha')) {
+    e.preventDefault();
+    fazerLogin();
+  }
+});
 
-</html>
+console.log('✅ Sistema de login pronto!');
+</script>

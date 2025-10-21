@@ -164,3 +164,59 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+// Navegação AJAX com suporte a scripts inline
+document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('.linkMenu');
+  const conteudo = document.getElementById('conteudo');
+  
+  links.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const pagina = this.getAttribute('data-page');
+      
+      if (pagina) {
+        carregarPagina(pagina);
+      }
+    });
+  });
+  
+  function carregarPagina(url) {
+    fetch(url)
+      .then(response => response.text())
+      .then(html => {
+        // Injeta o HTML no conteúdo
+        conteudo.innerHTML = html;
+        
+        // IMPORTANTE: Executa os scripts que vieram no HTML
+        executarScripts(conteudo);
+        
+        // Reinicializa o AOS (animações)
+        if (typeof AOS !== 'undefined') {
+          AOS.refresh();
+        }
+      })
+      .catch(erro => {
+        console.error('Erro ao carregar a página:', erro);
+        conteudo.innerHTML = '<p>Erro ao carregar o conteúdo.</p>';
+      });
+  }
+  
+  // Função para executar scripts inline
+  function executarScripts(elemento) {
+    const scripts = elemento.querySelectorAll('script');
+    scripts.forEach(scriptAntigo => {
+      const scriptNovo = document.createElement('script');
+      
+      // Copia atributos
+      Array.from(scriptAntigo.attributes).forEach(attr => {
+        scriptNovo.setAttribute(attr.name, attr.value);
+      });
+      
+      // Copia o código
+      scriptNovo.textContent = scriptAntigo.textContent;
+      
+      // Remove o script antigo e adiciona o novo (para forçar execução)
+      scriptAntigo.parentNode.replaceChild(scriptNovo, scriptAntigo);
+    });
+  }
+});

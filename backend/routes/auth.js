@@ -39,6 +39,7 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor.' });
   }
 });
+
 // Rota POST para login de usuário
 // URL: /auth/login
 router.post('/login', async (req, res) => {
@@ -72,9 +73,11 @@ router.post('/login', async (req, res) => {
         { expiresIn: '1h' } // O token expira em 1 hora
     );
 
+    // ✅ MODIFICAÇÃO: Adicionar o nome do usuário na resposta
     res.status(200).json({
       message: 'Login bem-sucedido!',
       token: token,
+      nome: usuarioEncontrado.nome  // ← LINHA ADICIONADA
     });
 
   } catch (err) {
@@ -82,4 +85,5 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor.' });
   }
 });
+
 module.exports = router;
