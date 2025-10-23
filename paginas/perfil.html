@@ -1,0 +1,57 @@
+<!-- paginas/perfil.html -->
+<!-- Seguindo o padrão de 'section' e 'container' -->
+<section id="perfil" class="container mt-5 mb-5">
+    <div class="row">
+        <!-- Coluna centralizada -->
+        <div class="col-md-8 offset-md-2">
+            
+            <!-- Card para o perfil -->
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="card-title text-center mb-4">Meu Perfil</h1>
+
+                    <!-- Mensagem de Carregamento -->
+                    <div id="loadingMessage" class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <p class="mt-2">Carregando informações...</p>
+                    </div>
+
+                    <!-- Informações do Perfil (escondido por padrão) -->
+                    <div id="profileInfo" class="profile-info" style="display: none;">
+                        <p><strong>Nome:</strong> <span id="userName"></span></p>
+                        <hr>
+                        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                        <hr>
+                        <p><strong>Telefone:</strong> <span id="userTelefone"></span></p>
+                        <hr>
+                        <p><strong>Data de Nascimento:</strong> <span id="userNascimento"></span></p>
+                        <hr>
+                        <p><strong>Tipo Sanguíneo:</strong> <span id="userTipoSanguineo"></span></p>
+                        <hr>
+                        <p><strong>Contato de Emergência:</strong> <span id="userContatoEmergencia"></span></p>
+                        <hr>
+                        <p><strong>Telefone de Emergência:</strong> <span id="userTelefoneEmergencia"></span></p>
+                        {/* <!-- Adicione mais campos aqui conforme sua tabela 'usuarios' --> */}
+                    </div>
+
+                    <!-- Mensagem de Erro -->
+                    <div id="errorMessage" class="alert alert-danger" style="display: none;" role="alert">
+                        Não foi possível carregar as informações do perfil.
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!--
+Script específico para esta página.
+Ele será executado pelo ajax-navigation.js após o HTML ser injetado.
+Ele assume que js/auth.js e js/api.js já foram carregados no index.html.
+-->
+<script src="/js/perfil.js"></script>
+

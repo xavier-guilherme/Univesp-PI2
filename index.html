@@ -86,7 +86,17 @@
         <!-- Galeria e Loja -->
         <li><a href="#" class="linkMenu" data-page="paginas/galeria.html">Galeria</a></li>
         <li><a href="#" class="linkMenu" data-page="paginas/loja.html">Loja</a></li>
-        <li><a href="#" class="linkMenu" data-page="paginas/login.html">Login <i class="bi bi-person-fill"></i></a></li>
+        <li id="login-nav-link">
+            <a href="#" class="linkMenu" data-page="paginas/login.html">Login <i class="bi bi-person-fill"></i></a>
+        </li>
+        <!-- Links de Usuário Logado (escondidos por padrão) -->
+        <li id="profile-nav-link" style="display: none;">
+            <a href="#" class="linkMenu" data-page="paginas/perfil.html">Meu Perfil</a>
+        </li>
+        <li id="logout-nav-link" style="display: none;">
+            <!-- Este link não navega, por isso não tem data-page -->
+            <a href="#" id="logout-button" class="linkMenu">Sair <i class="bi bi-box-arrow-right"></i></a>
+        </li>
 
         <!-- Opções do Site -->
         <li class="menu-item-com-submenu">
@@ -183,6 +193,9 @@
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.23.7/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.23.7/dist/js/uikit-icons.min.js"></script>
 
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+
 <!-- Seus scripts personalizados depois -->
 <script src="js/ajax-navigation.js"></script>
 <script src="js/darkmode.js"></script>
@@ -190,6 +203,36 @@
 <script src="js/menu-mobile.js"></script>
 <script src="js/scroll-top.js"></script>
 <script src="js/galeria-dinamica.js"></script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Atualiza a UI (Login/Logout/Perfil) assim que a página carrega
+    if (typeof updateNavUI === 'function') {
+      updateNavUI();
+    }
+
+    // 2. Adiciona listener para o botão de logout no header
+    // É importante usar 'body.addEventListener' para "pegar" o clique
+    // mesmo que o botão esteja dentro do menu mobile.
+    document.body.addEventListener('click', function(e) {
+      
+      // Procura pelo ID 'logout-button' subindo na árvore DOM
+      let targetElement = e.target;
+      while (targetElement != null) {
+        if (targetElement.id === 'logout-button') {
+          e.preventDefault(); // Impede qualquer navegação
+          if (typeof logout === 'function') {
+            logout(); // Chama a função de auth.js
+          }
+          return; // Encontrou e executou, pode parar
+        }
+        targetElement = targetElement.parentElement;
+      }
+    });
+  });
+</script>
+
   
   <!-- AOS JS -->
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
