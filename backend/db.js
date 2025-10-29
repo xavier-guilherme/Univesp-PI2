@@ -1,5 +1,7 @@
-// Carrega as variáveis de ambiente do arquivo .env
-require('dotenv').config();
+// Carrega as variáveis de ambiente do arquivo .env APENAS se não estiver em produção
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 // Importa o cliente do PostgreSQL
 const { Pool } = require('pg');
