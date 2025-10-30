@@ -2,7 +2,7 @@
 // Funções globais para chamadas de API
 
 // Ajuste se necessário no deploy
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = '';
 
 /**
  * Cabeçalhos padrão com Authorization quando houver token.
