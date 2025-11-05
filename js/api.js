@@ -68,3 +68,34 @@ async function postJson(endpoint, body) {
   }
   return data;
 }
+
+function getAuthHeaders() {
+  const token = getToken && getToken();
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  return headers;
+}
+
+async function postJsonAuth(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Erro ${res.status} ao POST ${url}`);
+  }
+  return res.json();
+}
+
+async function getJsonAuth(url) {
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Erro ${res.status} ao GET ${url}`);
+  }
+  return res.json();
+}

@@ -27,7 +27,10 @@ async function submitLoginForm(event) {
     if (!jwt) throw new Error('Token não recebido na resposta do servidor.');
 
     saveToken(jwt);             // de auth.js (agora salva em 'token')
-    if (data.user?.name) localStorage.setItem('userName', data.user.name);
+    if (data.user?.name) {
+      localStorage.setItem('userName', data.user.name);
+      localStorage.setItem('userPerfil', data.user.perfil); // ← LINHA ADICIONADA
+    }
     if (typeof updateNavUI === 'function') updateNavUI();
 
     if (typeof window.carregarPagina === 'function') {

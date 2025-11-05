@@ -35,6 +35,7 @@ function getToken() {
 function removeToken() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem('userName');
+  localStorage.removeItem('userPerfil');
 }
 
 /**
@@ -90,4 +91,17 @@ function updateNavUI() {
     loginLink.style.display = 'list-item';
     logoutLink.style.display = 'none';
   }
+}
+/**
+ * Obtém o perfil do usuário do localStorage.
+ */
+function getUserPerfil() {
+  return localStorage.getItem('userPerfil');
+}
+
+/**
+ * Verifica se o usuário é admin.
+ */
+function isAdmin() {
+  return getUserPerfil() === 'admin';
 }

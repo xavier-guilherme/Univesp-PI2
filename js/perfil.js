@@ -28,7 +28,7 @@
         // 3. BUSCAR DADOS DA API
         console.log("Buscando dados do usuário na API...");
         // A função getJson (do api.js) já inclui o token no cabeçalho
-        const userData = await getJson('/api/user/profile'); // Rota correta do backend
+        const userData = await getJsonAuth('/api/user/profile'); // usa Authorization: Bearer <token>
 
         console.log("Dados recebidos:", userData);
 

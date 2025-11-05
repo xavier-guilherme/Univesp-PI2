@@ -73,11 +73,14 @@ router.post('/login', async (req, res) => {
         { expiresIn: '1h' } // O token expira em 1 hora
     );
 
-    // ✅ MODIFICAÇÃO: Adicionar o nome do usuário na resposta
+    // Adicionar o nome e perfil do usuário na resposta
     res.status(200).json({
       message: 'Login bem-sucedido!',
       token: token,
-      nome: usuarioEncontrado.nome  // ← LINHA ADICIONADA
+      user: {
+        name: usuarioEncontrado.nome,
+        perfil: usuarioEncontrado.perfil
+      }
     });
 
   } catch (err) {
