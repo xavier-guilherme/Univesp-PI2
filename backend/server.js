@@ -7,7 +7,8 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const aulasRoutes = require('./routes/aulas');
-const agendamentosRoutes = require('./routes/agendamentos'); // <-- Importa as rotas de agendamentos
+const agendamentosRoutes = require('./routes/agendamentos');
+const checkinsRoutes = require('./routes/checkins');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use('/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/aulas', aulasRoutes);
 app.use('/api/agendamentos', agendamentosRoutes);
+app.use('/api/checkins', checkinsRoutes);
 
 // Rota principal (NÃO PRECISA MAIS, O express.static vai servir o index.html)
 /*

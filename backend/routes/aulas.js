@@ -25,11 +25,17 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// GET /api/aulas - Listar todas as aulas
+// GET /api/aulas - Listar todas as aulas com contagem de vagas
 router.get('/', async (req, res) => {
   try {
     const result = await db.query(
-      'SELECT * FROM aulas ORDER BY data_hora'
+      `SELECT 
+        au.*,
+        (au.vagas_totais - COUNT(ag.id)) as vagas_disponiveis
+      FROM aulas au
+      LEFT JOIN agendamentos ag ON au.id = ag.aula_id
+      GROUP BY au.id
+      ORDER BY au.data_hora`
     );
     res.json(result.rows);
   } catch (err) {

@@ -1,0 +1,28 @@
+<section class="pagina-conteudo admin-checkins-page" data-aos="fade-up">
+  
+  <div id="accessDenied" style="display: none;" class="alert alert-danger">
+    <h3>Acesso Negado</h3>
+    <p>Esta área é restrita a administradores.</p>
+  </div>
+
+  <div id="adminContent" style="display: none;">
+    
+    <h2>Check-ins Realizados</h2>
+    
+    <!-- Filtros -->
+    <div class="filters" style="margin-bottom: 20px;">
+      <label for="filtroAula">Filtrar por aula:</label>
+      <select id="filtroAula">
+        <option value="">Todas as aulas</option>
+      </select>
+    </div>
+
+    <!-- Lista de Check-ins -->
+    <div id="loadingCheckins" style="text-align: center;">Carregando...</div>
+    <div id="checkinsContainer"></div>
+    <div id="errorCheckins" class="alert alert-danger" style="display: none;"></div>
+
+  </div>
+</section>
+
+<script src="/js/admin_checkins.js"></script>

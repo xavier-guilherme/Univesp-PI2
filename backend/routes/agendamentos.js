@@ -62,10 +62,27 @@ router.post('/', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'aula_id é obrigatório' });
     }
 
-    // Verificar se aula existe
-    const aulaResult = await db.query('SELECT * FROM aulas WHERE id = $1', [aula_id]);
+    // Verificar se aula existe e buscar vagas
+    const aulaResult = await db.query(
+      `SELECT 
+        au.*,
+        (au.vagas_totais - COUNT(ag.id)) as vagas_disponiveis
+      FROM aulas au
+      LEFT JOIN agendamentos ag ON au.id = ag.aula_id
+      WHERE au.id = $1
+      GROUP BY au.id`,
+      [aula_id]
+    );
+
     if (aulaResult.rows.length === 0) {
       return res.status(404).json({ error: 'Aula não encontrada' });
+    }
+
+    const aula = aulaResult.rows[0];
+
+    // Verificar se há vagas disponíveis
+    if (aula.vagas_disponiveis <= 0) {
+      return res.status(400).json({ error: 'Não há vagas disponíveis para esta aula' });
     }
 
     // Verificar se já tem agendamento

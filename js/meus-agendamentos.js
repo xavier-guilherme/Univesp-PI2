@@ -47,16 +47,27 @@
           return;
         }
         
-        const html = aulas.map(aula => `
-          <div class="card" style="margin-bottom: 15px; padding: 15px;">
-            <h4>${aula.nome}</h4>
-            <p><strong>Instrutor:</strong> ${aula.instrutor || 'Não informado'}</p>
-            <p><strong>Horário:</strong> ${formatarHorario(aula.data_hora)}</p>
-            <p><strong>Tipo:</strong> ${aula.tipo_aula || 'Regular'}</p>
-            <p><strong>Vagas:</strong> ${aula.vagas_totais}</p>
-            <button class="btn-primary btn-agendar" data-id="${aula.id}">Agendar</button>
-          </div>
-        `).join('');
+        const html = aulas.map(aula => {
+          const vagasEsgotadas = aula.vagas_disponiveis <= 0;
+          
+          return `
+            <div class="card" style="margin-bottom: 15px; padding: 15px;">
+              <h4>${aula.nome}</h4>
+              <p><strong>Instrutor:</strong> ${aula.instrutor || 'Não informado'}</p>
+              <p><strong>Horário:</strong> ${formatarHorario(aula.data_hora)}</p>
+              <p><strong>Tipo:</strong> ${aula.tipo_aula || 'Regular'}</p>
+              <p><strong>Vagas disponíveis:</strong> 
+                <span style="color: ${vagasEsgotadas ? '#dc3545' : '#28a745'}">
+                  ${aula.vagas_disponiveis} de ${aula.vagas_totais}
+                </span>
+              </p>
+              ${vagasEsgotadas 
+                ? '<button class="btn-secondary" disabled>Vagas Esgotadas</button>'
+                : `<button class="btn-primary btn-agendar" data-id="${aula.id}">Agendar</button>`
+              }
+            </div>
+          `;
+        }).join('');
         
         aulasDisponiveis.innerHTML = html;
         
