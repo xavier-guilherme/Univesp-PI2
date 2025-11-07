@@ -55,40 +55,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Função para atualizar o conteúdo
-  function updateContent(html, pagina) {
-    conteudo.classList.add("fade-out");
+function updateContent(html, pagina) {
+  conteudo.classList.add("fade-out");
+  setTimeout(() => {
+    conteudo.innerHTML = html;
+    conteudo.classList.remove("fade-out");
+    conteudo.classList.add("animar-secao");
+    executarScripts(conteudo);
+    if (typeof AOS !== "undefined") { AOS.refresh(); }
+    if (typeof updateNavUI === "function") updateNavUI();
+    updateActiveLink(pagina);
 
-    setTimeout(() => {
-      conteudo.innerHTML = html;
-      conteudo.classList.remove("fade-out");
-      conteudo.classList.add("animar-secao");
-
-      // ===================================================================
-      // SUBSTITUIÇÃO: 
-      // Chamando 'executarScripts' (do seu Bloco 2)
-      // Esta é a função correta para carregar 'login.js', 'perfil.js', etc.
-      // ===================================================================
-      executarScripts(conteudo);
-      
-      // Reinicializa o AOS (animações)
-      if (typeof AOS !== 'undefined') {
-        AOS.refresh();
-      }
-
-      // ===================================================================
-      // MODIFICAÇÃO 2 (NECESSÁRIA): Chamar 'updateNavUI'
-      // Isso atualiza os botões "Login/Logout" a cada navegação.
-      // ===================================================================
-      if (typeof updateNavUI === 'function') {
-        updateNavUI();
-      }
-      // ===================================================================
-      
-      // Atualiza link ativo (do seu Bloco 1)
-      updateActiveLink(pagina);
-      
-    }, 300); // 300ms da sua animação fade-out
-  }
+    conteudo.querySelectorAll(".linkMenu").forEach(link => {
+      link.addEventListener("click", e => {
+        const pagina = link.getAttribute("data-page");
+        if (pagina) {
+          e.preventDefault();
+          window.carregarPagina(pagina);
+          if (supportsHistory) {
+            history.pushState(null, "", "#!" + pagina);
+          } else {
+            window.location.hash = "#!" + pagina;
+          }
+        }
+      });
+    });
+    // -----------------------------------------
+  }, 300);
+}
 
   // Função para mostrar erro
   function showErrorPage(failedPage) {

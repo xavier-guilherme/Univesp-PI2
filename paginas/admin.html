@@ -1,0 +1,45 @@
+<section class="pagina-conteudo admin-page" data-aos="fade-up" id="Admin" aria-labelledby="titulo-Admin">
+  
+  <!-- Verificação de permissão (será controlada pelo JS) -->
+  <div id="accessDenied" style="display: none;" class="alert alert-danger">
+    <h3>Acesso Negado</h3>
+    <p>Esta área é restrita a administradores.</p>
+  </div>
+
+  <!-- Conteúdo Admin (só aparece se for admin) -->
+  <div id="adminContent" style="display: none;">
+    
+    <h2 id="titulo-Admin">Área Administrativa</h2>
+    
+    <!-- Formulário de Cadastro de Aluno -->
+    <div class="admin-section">
+      <h3>Cadastrar Novo Aluno</h3>
+      
+      <form id="createStudentForm">
+        <div class="form-group">
+          <label for="studentName">Nome Completo:</label>
+          <input type="text" id="studentName" name="nome" required placeholder="Digite o nome completo">
+        </div>
+        
+        <div class="form-group">
+          <label for="studentEmail">E-mail:</label>
+          <input type="email" id="studentEmail" name="email" required placeholder="Digite o e-mail">
+        </div>
+        
+        <div class="form-group">
+          <label for="studentPassword">Senha Inicial:</label>
+          <input type="password" id="studentPassword" name="senha" required placeholder="Digite uma senha">
+        </div>
+        
+        <button type="submit" class="btn-primary">Cadastrar Aluno</button>
+      </form>
+      
+      <!-- Mensagens de feedback -->
+      <div id="createStudentSuccess" class="alert alert-success" style="display: none;"></div>
+      <div id="createStudentError" class="alert alert-danger" style="display: none;"></div>
+    </div>
+
+  </div>
+</section>
+
+<script src="/js/admin.js"></script>

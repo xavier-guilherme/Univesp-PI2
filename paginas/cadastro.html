@@ -1,0 +1,25 @@
+<section class="pagina-conteudo cadastro-page" data-aos="fade-up" id="Cadastro" aria-labelledby="titulo-Cadastro">
+  <div class="cadastro-box">
+    <h2 id="titulo-Cadastro">Criar Conta</h2>
+    
+    <form id="cadastroForm">
+      <div class="form-group">
+        <label for="cadastroNome">Nome completo</label>
+        <input type="text" id="cadastroNome" name="nome" required placeholder="Digite seu nome completo">
+      </div>
+      <div class="form-group">
+        <label for="cadastroEmail">E-mail</label>
+        <input type="email" id="cadastroEmail" name="email" required placeholder="Digite seu e-mail">
+      </div>
+      <div class="form-group">
+        <label for="cadastroSenha">Senha</label>
+        <input type="password" id="cadastroSenha" name="senha" required placeholder="Digite uma senha">
+      </div>
+      <button type="submit" class="btn-primary">Criar Conta</button>
+    </form>
+
+    <div id="cadastroSuccess" class="alert alert-success" style="display:none;"></div>
+    <div id="cadastroError" class="alert alert-danger" style="display:none;"></div>
+  </div>
+</section>
+<script src="/js/cadastro.js"></script>

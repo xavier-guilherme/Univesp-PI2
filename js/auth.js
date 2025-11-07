@@ -79,6 +79,7 @@ function updateNavUI() {
   const profileLink = document.getElementById('profile-nav-link');
   const loginLink = document.getElementById('login-nav-link');
   const logoutLink = document.getElementById('logout-nav-link');
+  const adminLink = document.getElementById('admin-nav-link');
 
   if (!profileLink || !loginLink || !logoutLink) return;
 
@@ -86,12 +87,21 @@ function updateNavUI() {
     profileLink.style.display = 'list-item';
     loginLink.style.display = 'none';
     logoutLink.style.display = 'list-item';
+    
+    // Mostrar link admin apenas se for admin
+    if (adminLink && isAdmin()) {
+      adminLink.style.display = 'list-item';
+    } else if (adminLink) {
+      adminLink.style.display = 'none';
+    }
   } else {
     profileLink.style.display = 'none';
     loginLink.style.display = 'list-item';
     logoutLink.style.display = 'none';
+    if (adminLink) adminLink.style.display = 'none';
   }
 }
+
 /**
  * Obtém o perfil do usuário do localStorage.
  */
