@@ -1,36 +1,25 @@
-<section class="pagina-conteudo" data-aos="fade-up" id="MeusAgendamentos" aria-labelledby="titulo-MeusAgendamentos">
-  <div class="texto-conteudo">
-    <h2 id="titulo-MeusAgendamentos">Agendamentos</h2>
-
-    <div id="mensagem-ag" role="status" aria-live="polite"></div>
-
-    <!-- SEÇÃO 1: Agendar Nova Aula -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h4 class="mb-0"><i class="bi bi-plus-circle-fill text-success"></i> Agendar Nova Aula</h4>
-      </div>
-      <div class="card-body">
-        <p class="card-text">Escolha uma das aulas disponíveis e clique em "Agendar":</p>
-        <div id="lista-aulas-disponiveis" class="row">
-          <p>Carregando aulas disponíveis...</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SEÇÃO 2: Meus Agendamentos -->
-    <div class="card">
-      <div class="card-header">
-        <h4 class="mb-0"><i class="bi bi-calendar-check-fill text-info"></i> Meus Agendamentos</h4>
-      </div>
-      <div class="card-body">
-        <p class="card-text">Suas aulas agendadas:</p>
-        <div id="lista-agendamentos" class="row">
-          <p>Carregando seus agendamentos...</p>
-        </div>
-      </div>
-    </div>
+<section class="pagina-conteudo agendamentos-page" data-aos="fade-up">
+  
+  <h2>Meus Agendamentos</h2>
+  
+  <!-- Seção: Aulas Disponíveis -->
+  <div class="section-container">
+    <h3>Aulas Disponíveis para Agendamento</h3>
+    <div id="loadingAulas" style="text-align: center;">Carregando aulas...</div>
+    <div id="aulasDisponiveis"></div>
+    <div id="errorAulas" class="alert alert-danger" style="display: none;"></div>
   </div>
 
-  <!-- Script da página -->
-  <script src="/js/meus-agendamentos.js"></script>
+  <hr style="margin: 30px 0;">
+
+  <!-- Seção: Meus Agendamentos -->
+  <div class="section-container">
+    <h3>Minhas Aulas Agendadas</h3>
+    <div id="loadingAgendamentos" style="text-align: center;">Carregando agendamentos...</div>
+    <div id="meusAgendamentos"></div>
+    <div id="errorAgendamentos" class="alert alert-danger" style="display: none;"></div>
+  </div>
+
 </section>
+
+<script src="/js/meus-agendamentos.js"></script>
