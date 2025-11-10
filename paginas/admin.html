@@ -9,13 +9,66 @@
   <!-- Conteúdo Admin (só aparece se for admin) -->
   <div id="adminContent" style="display: none;">
     
-    <h2 id="titulo-Admin">Área Administrativa</h2>
+    <h2 id="titulo-Admin">Painel Administrativo</h2>
+    <p class="subtitle-admin">Bem-vindo! Escolha uma opção abaixo para gerenciar o sistema.</p>
     
-    <!-- Formulário de Cadastro de Aluno -->
-    <div class="admin-section">
-      <h3>Cadastrar Novo Aluno</h3>
+    <!-- Dashboard com Cards -->
+    <div class="admin-dashboard">
       
-      <form id="createStudentForm">
+      <!-- Card 1: Cadastrar Aluno -->
+      <div class="dashboard-card card-cadastro">
+        <div class="card-icon">
+          <i class="bi bi-person-plus-fill"></i>
+        </div>
+        <div class="card-content">
+          <h3>Cadastrar Aluno</h3>
+          <p>Adicione novos alunos ao sistema</p>
+        </div>
+        <button class="btn-card" onclick="mostrarSecao('cadastro')">
+          <i class="bi bi-arrow-right"></i> Acessar
+        </button>
+      </div>
+
+      <!-- Card 2: Gerenciar Aulas -->
+      <div class="dashboard-card card-aulas">
+        <div class="card-icon">
+          <i class="bi bi-calendar-week-fill"></i>
+        </div>
+        <div class="card-content">
+          <h3>Gerenciar Aulas</h3>
+          <p>Crie, edite e exclua aulas</p>
+        </div>
+        <a href="#" class="linkMenu btn-card" data-page="paginas/admin/aulas.html">
+          <i class="bi bi-arrow-right"></i> Acessar
+        </a>
+      </div>
+
+      <!-- Card 3: Ver Check-ins -->
+      <div class="dashboard-card card-checkins">
+        <div class="card-icon">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="card-content">
+          <h3>Check-ins Realizados</h3>
+          <p>Visualize todos os check-ins dos alunos</p>
+        </div>
+        <a href="#" class="linkMenu btn-card" data-page="paginas/admin/checkins.html">
+          <i class="bi bi-arrow-right"></i> Acessar
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Seção de Cadastro de Aluno (aparece ao clicar no card) -->
+    <div id="secaoCadastro" class="admin-section" style="display: none;">
+      <div class="section-header">
+        <h3><i class="bi bi-person-plus"></i> Cadastrar Novo Aluno</h3>
+        <button class="btn-voltar" onclick="voltarDashboard()">
+          <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+        </button>
+      </div>
+      
+      <form id="createStudentForm" class="form-cadastro">
         <div class="form-group">
           <label for="studentName">Nome Completo:</label>
           <input type="text" id="studentName" name="nome" required placeholder="Digite o nome completo">
@@ -31,26 +84,10 @@
           <input type="password" id="studentPassword" name="senha" required placeholder="Digite uma senha">
         </div>
         
-        <button type="submit" class="btn-primary">Cadastrar Aluno</button>
+        <button type="submit" class="btn-primary btn-submit">
+          <i class="bi bi-save"></i> Cadastrar Aluno
+        </button>
       </form>
-      
-      <hr style="margin: 30px 0;">
-
-      <div class="admin-section">
-        <h3>Gestão de Aulas</h3>
-        <p>Gerencie as aulas disponíveis para agendamento.</p>
-        <a href="#" class="linkMenu btn-primary" data-page="paginas/admin/aulas.html">
-          <i class="bi bi-calendar-week"></i> Gerenciar Aulas
-        </a>
-      </div>
-      <div class="admin-section">
-        <h3>Check-ins Realizados</h3>
-        <p>Visualize todos os check-ins dos alunos.</p>
-        <a href="#" class="linkMenu btn-primary" data-page="paginas/admin/checkins.html">
-          <i class="bi bi-check-circle"></i> Ver Check-ins
-        </a>
-      </div>
-
 
       <!-- Mensagens de feedback -->
       <div id="createStudentSuccess" class="alert alert-success" style="display: none;"></div>
@@ -61,3 +98,25 @@
 </section>
 
 <script src="/js/admin.js"></script>
+
+<script>
+// Funções para navegação entre dashboard e seções
+function mostrarSecao(secao) {
+  document.querySelector('.admin-dashboard').style.display = 'none';
+  document.querySelector('.subtitle-admin').style.display = 'none';
+  
+  if (secao === 'cadastro') {
+    document.getElementById('secaoCadastro').style.display = 'block';
+  }
+}
+
+function voltarDashboard() {
+  document.querySelector('.admin-dashboard').style.display = 'grid';
+  document.querySelector('.subtitle-admin').style.display = 'block';
+  document.getElementById('secaoCadastro').style.display = 'none';
+  
+  // Limpar mensagens de sucesso/erro
+  document.getElementById('createStudentSuccess').style.display = 'none';
+  document.getElementById('createStudentError').style.display = 'none';
+}
+</script>

@@ -1,15 +1,85 @@
 <!-- paginas/perfil.html -->
-<!-- Seguindo o padrão de 'section' e 'container' -->
 <section id="perfil" class="container mt-5 mb-5">
-    <div class="row">
-        <!-- Coluna centralizada -->
-        <div class="col-md-8 offset-md-2">
-            
-            <!-- Card para o perfil -->
-            <div class="card shadow-sm">
-                <div class="card-body p-4 p-md-5">
-                    <h1 class="card-title text-center mb-4">Meu Perfil</h1>
+    
+    <!-- Dashboard do Aluno -->
+    <div class="aluno-dashboard">
+        
+        <!-- Header do Dashboard -->
+        <div class="dashboard-header">
+            <h1>Bem-vindo, <span id="userName">Aluno</span>!</h1>
+            <p class="dashboard-subtitle">Gerencie suas aulas e informações pessoais</p>
+        </div>
 
+        <!-- Card de Próximo Agendamento em Destaque -->
+        <div class="destaque-agendamento">
+            <div class="destaque-header">
+                <i class="bi bi-calendar-event"></i>
+                <h2>Próximo Agendamento</h2>
+            </div>
+            
+            <div id="proximoAgendamentoContent">
+                <div class="loading-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <p>Carregando próximo agendamento...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de Ações Rápidas -->
+        <div class="acoes-rapidas">
+            
+            <!-- Card: Agendar Nova Aula -->
+            <div class="acao-card card-agendar">
+                <div class="acao-icon">
+                    <i class="bi bi-calendar-plus-fill"></i>
+                </div>
+                <h3>Agendar Aula</h3>
+                <p>Reserve sua próxima aula</p>
+                <a href="#" class="linkMenu btn-acao" data-page="paginas/meus-agendamentos.html">
+                    <i class="bi bi-arrow-right"></i> Acessar
+                </a>
+            </div>
+
+            <!-- Card: Meus Agendamentos -->
+            <div class="acao-card card-agendamentos">
+                <div class="acao-icon">
+                    <i class="bi bi-list-check"></i>
+                </div>
+                <h3>Meus Agendamentos</h3>
+                <p>Veja suas aulas agendadas</p>
+                <a href="#" class="linkMenu btn-acao" data-page="paginas/meus-agendamentos.html">
+                    <i class="bi bi-arrow-right"></i> Acessar
+                </a>
+            </div>
+
+            <!-- Card: Meu Perfil -->
+            <div class="acao-card card-perfil">
+                <div class="acao-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <h3>Meu Perfil</h3>
+                <p>Visualize suas informações</p>
+                <button class="btn-acao" onclick="mostrarPerfil()">
+                    <i class="bi bi-arrow-right"></i> Ver Detalhes
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Seção de Informações do Perfil (oculta inicialmente) -->
+        <div id="secaoPerfil" class="secao-perfil" style="display: none;">
+            <div class="perfil-header">
+                <h2><i class="bi bi-person-circle"></i> Informações do Perfil</h2>
+                <button class="btn-fechar" onclick="fecharPerfil()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    
                     <!-- Mensagem de Carregamento -->
                     <div id="loadingMessage" class="text-center">
                         <div class="spinner-border text-primary" role="status">
@@ -18,22 +88,29 @@
                         <p class="mt-2">Carregando informações...</p>
                     </div>
 
-                    <!-- Informações do Perfil (escondido por padrão) -->
+                    <!-- Informações do Perfil -->
                     <div id="profileInfo" class="profile-info" style="display: none;">
-                        <p><strong>Nome:</strong> <span id="userName"></span></p>
-                        <hr>
-                        <p><strong>Email:</strong> <span id="userEmail"></span></p>
-                        <hr>
-                        <p><strong>Telefone:</strong> <span id="userTelefone"></span></p>
-                        <hr>
-                        <p><strong>Data de Nascimento:</strong> <span id="userNascimento"></span></p>
-                        <hr>
-                        <p><strong>Tipo Sanguíneo:</strong> <span id="userTipoSanguineo"></span></p>
-                        <hr>
-                        <p><strong>Contato de Emergência:</strong> <span id="userContatoEmergencia"></span></p>
-                        <hr>
-                        <p><strong>Telefone de Emergência:</strong> <span id="userTelefoneEmergencia"></span></p>
-                        {/* <!-- Adicione mais campos aqui conforme sua tabela 'usuarios' --> */}
+                        <div class="info-item">
+                            <strong>Nome:</strong> <span id="userNamePerfil"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Email:</strong> <span id="userEmail"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Telefone:</strong> <span id="userTelefone"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Data de Nascimento:</strong> <span id="userNascimento"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Tipo Sanguíneo:</strong> <span id="userTipoSanguineo"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Contato de Emergência:</strong> <span id="userContatoEmergencia"></span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Telefone de Emergência:</strong> <span id="userTelefoneEmergencia"></span>
+                        </div>
                     </div>
 
                     <!-- Mensagem de Erro -->
@@ -43,15 +120,97 @@
 
                 </div>
             </div>
-            
         </div>
+
     </div>
+
 </section>
 
-<!--
-Script específico para esta página.
-Ele será executado pelo ajax-navigation.js após o HTML ser injetado.
-Ele assume que js/auth.js e js/api.js já foram carregados no index.html.
--->
 <script src="/js/perfil.js"></script>
 
+<script>
+// Função para mostrar seção de perfil
+function mostrarPerfil() {
+    document.getElementById('secaoPerfil').style.display = 'block';
+    document.getElementById('secaoPerfil').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Função para fechar seção de perfil
+function fecharPerfil() {
+    document.getElementById('secaoPerfil').style.display = 'none';
+}
+
+// Carregar próximo agendamento ao carregar a página
+async function carregarProximoAgendamento() {
+    const container = document.getElementById('proximoAgendamentoContent');
+    
+    try {
+        const agendamentos = await getJsonAuth('/api/agendamentos/meus');
+        
+        // Filtrar apenas agendamentos futuros
+        const agora = new Date();
+        const agendamentosFuturos = agendamentos.filter(ag => {
+            const dataAula = new Date(ag.data_hora);
+            return dataAula > agora;
+        }).sort((a, b) => new Date(a.data_hora) - new Date(b.data_hora));
+        
+        if (agendamentosFuturos.length > 0) {
+            const proximo = agendamentosFuturos[0];
+            const dataAula = new Date(proximo.data_hora);
+            
+            container.innerHTML = `
+                <div class="proximo-agendamento-info">
+                    <div class="aula-nome">
+                        <i class="bi bi-water"></i>
+                        <h3>${proximo.aula_nome}</h3>
+                    </div>
+                    <div class="aula-detalhes">
+                        <div class="detalhe-item">
+                            <i class="bi bi-person"></i>
+                            <span><strong>Instrutor:</strong> ${proximo.instrutor || 'Não informado'}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <i class="bi bi-calendar"></i>
+                            <span><strong>Data:</strong> ${dataAula.toLocaleDateString('pt-BR')}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <i class="bi bi-clock"></i>
+                            <span><strong>Horário:</strong> ${dataAula.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <i class="bi bi-tag"></i>
+                            <span><strong>Tipo:</strong> ${proximo.tipo_aula || 'Regular'}</span>
+                        </div>
+                    </div>
+                    ${proximo.checkin_feito ? 
+                        '<div class="checkin-status checkin-feito"><i class="bi bi-check-circle-fill"></i> Check-in realizado</div>' : 
+                        '<div class="checkin-status checkin-pendente"><i class="bi bi-clock-fill"></i> Lembre-se de fazer o check-in</div>'
+                    }
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="sem-agendamento">
+                    <i class="bi bi-calendar-x"></i>
+                    <p>Você não possui agendamentos futuros</p>
+                    <a href="#" class="linkMenu btn-primary" data-page="paginas/meus-agendamentos.html">
+                        <i class="bi bi-calendar-plus"></i> Agendar Aula
+                    </a>
+                </div>
+            `;
+        }
+    } catch (error) {
+        container.innerHTML = `
+            <div class="erro-agendamento">
+                <i class="bi bi-exclamation-circle"></i>
+                <p>Não foi possível carregar os agendamentos</p>
+            </div>
+        `;
+    }
+}
+
+// Executar ao carregar
+setTimeout(() => {
+    carregarProximoAgendamento();
+}, 500);
+</script>
