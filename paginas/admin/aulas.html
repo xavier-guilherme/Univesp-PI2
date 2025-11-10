@@ -9,62 +9,155 @@
   <!-- Conteúdo Admin -->
   <div id="adminContent" style="display: none;">
     
-    <h2>Gestão de Aulas</h2>
+    <div class="page-header">
+      <h2><i class="bi bi-calendar-week"></i> Gestão de Aulas</h2>
+      <button id="btnNovaAula" class="btn-primary">
+        <i class="bi bi-plus-circle"></i> Nova Aula
+      </button>
+    </div>
     
-    <!-- Botão para abrir formulário de nova aula -->
-    <button id="btnNovaAula" class="btn-primary" style="margin-bottom: 20px;">
-      <i class="bi bi-plus-circle"></i> Nova Aula
-    </button>
-
     <!-- Formulário de Aula (oculto por padrão) -->
-    <div id="formAulaContainer" style="display: none; margin-bottom: 30px;">
-      <h3 id="formTitle">Cadastrar Nova Aula</h3>
-        <form id="formAula">
+    <div id="formAulaContainer" class="form-container" style="display: none;">
+      <div class="form-header">
+        <h3 id="formTitle"><i class="bi bi-pencil-square"></i> Cadastrar Nova Aula</h3>
+        <button type="button" id="btnCancelar" class="btn-close-form">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      
+      <form id="formAula" class="form-aula">
         <input type="hidden" id="aulaId" name="id">
         
-        <div class="form-group">
-            <label for="aulaNome">Nome da Aula:</label>
-            <input type="text" id="aulaNome" name="nome" required placeholder="Ex: Canoa Caiçara Iniciante">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="aulaNome">
+              <i class="bi bi-pencil"></i> Nome da Aula <span class="required">*</span>
+            </label>
+            <input type="text" id="aulaNome" name="nome" required 
+                   placeholder="Ex: Canoa Caiçara Iniciante">
+          </div>
+          
+          <div class="form-group">
+            <label for="aulaInstrutor">
+              <i class="bi bi-person"></i> Instrutor
+            </label>
+            <input type="text" id="aulaInstrutor" name="instrutor" 
+                   placeholder="Nome do instrutor">
+          </div>
         </div>
-        
-        <div class="form-group">
-            <label for="aulaInstrutor">Instrutor:</label>
-            <input type="text" id="aulaInstrutor" name="instrutor" placeholder="Nome do instrutor">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="aulaData">
+              <i class="bi bi-calendar"></i> Data <span class="required">*</span>
+            </label>
+            <input type="date" id="aulaData" name="data" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="aulaHorario">
+              <i class="bi bi-clock"></i> Horário <span class="required">*</span>
+            </label>
+            <input type="time" id="aulaHorario" name="horario" required>
+          </div>
         </div>
-        
-        <div class="form-group">
-            <label for="aulaHorario">Horário:</label>
-            <input type="time" id="aulaHorario" name="data_hora" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="aulaVagas">Vagas Totais:</label>
-            <input type="number" id="aulaVagas" name="vagas_totais" required min="1" placeholder="Ex: 10">
-        </div>
-        
-        <div class="form-group">
-            <label for="aulaTipo">Tipo de Aula:</label>
-            <select id="aulaTipo" name="tipo_aula">
-            <option value="Regular">Regular</option>
-            <option value="Iniciante">Iniciante</option>
-            <option value="Avançado">Avançado</option>
-            <option value="Experimental">Experimental</option>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="aulaVagas">
+              <i class="bi bi-people"></i> Vagas Totais <span class="required">*</span>
+            </label>
+            <input type="number" id="aulaVagas" name="vagas_totais" 
+                   required min="1" max="50" placeholder="Ex: 10">
+            <small class="form-hint">Entre 1 e 50 vagas</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="aulaTipo">
+              <i class="bi bi-tag"></i> Tipo de Aula <span class="required">*</span>
+            </label>
+            <select id="aulaTipo" name="tipo_aula" required>
+              <option value="">Selecione o tipo</option>
+              <option value="Regular">Regular</option>
+              <option value="Iniciante">Iniciante</option>
+              <option value="Avançado">Avançado</option>
+              <option value="Experimental">Experimental</option>
             </select>
+          </div>
         </div>
         
-        <button type="submit" class="btn-primary">Salvar Aula</button>
-        <button type="button" id="btnCancelar" class="btn-secondary">Cancelar</button>
-        </form>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary btn-submit">
+            <i class="bi bi-save"></i> Salvar Aula
+          </button>
+          <button type="button" id="btnCancelarForm" class="btn-secondary">
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
+        </div>
+      </form>
       
       <div id="formSuccess" class="alert alert-success" style="display: none;"></div>
       <div id="formError" class="alert alert-danger" style="display: none;"></div>
     </div>
 
+    <!-- Filtros de Busca -->
+    <div class="filtros-container">
+      <h3><i class="bi bi-funnel"></i> Filtrar Aulas</h3>
+      <div class="filtros-grid">
+        <div class="filtro-item">
+          <label for="filtroTipo">
+            <i class="bi bi-tag"></i> Tipo de Aula
+          </label>
+          <select id="filtroTipo" class="form-control">
+            <option value="">Todos os tipos</option>
+            <option value="Regular">Regular</option>
+            <option value="Iniciante">Iniciante</option>
+            <option value="Avançado">Avançado</option>
+            <option value="Experimental">Experimental</option>
+          </select>
+        </div>
+
+        <div class="filtro-item">
+          <label for="filtroInstrutor">
+            <i class="bi bi-person"></i> Instrutor
+          </label>
+          <input type="text" id="filtroInstrutor" class="form-control" 
+                 placeholder="Nome do instrutor">
+        </div>
+
+        <div class="filtro-item">
+          <label for="filtroData">
+            <i class="bi bi-calendar"></i> Data
+          </label>
+          <input type="date" id="filtroData" class="form-control">
+        </div>
+
+        <div class="filtro-item filtro-actions">
+          <button id="btnAplicarFiltros" class="btn-primary btn-filtro">
+            <i class="bi bi-search"></i> Filtrar
+          </button>
+          <button id="btnLimparFiltros" class="btn-secondary btn-filtro">
+            <i class="bi bi-x-circle"></i> Limpar
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Lista de Aulas -->
-    <div id="listaAulas">
-      <h3>Aulas Cadastradas</h3>
-      <div id="loadingAulas" style="text-align: center;">Carregando...</div>
-      <div id="aulasContainer"></div>
+    <div id="listaAulas" class="lista-container">
+      <div class="lista-header">
+        <h3><i class="bi bi-list-ul"></i> Aulas Cadastradas</h3>
+        <span id="totalAulas" class="badge-total">0 aulas</span>
+      </div>
+      
+      <div id="loadingAulas" class="loading-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p>Carregando aulas...</p>
+      </div>
+      
+      <div id="aulasContainer" class="table-responsive"></div>
       <div id="errorAulas" class="alert alert-danger" style="display: none;"></div>
     </div>
 

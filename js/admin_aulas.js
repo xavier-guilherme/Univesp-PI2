@@ -2,15 +2,6 @@
 
 (async function() {
   try {
-    // Função auxiliar para formatar horário
-    function formatarHorario(dataHora) {
-        if (!dataHora) return 'Não definido';
-        const data = new Date(dataHora);
-        const horas = String(data.getHours()).padStart(2, '0');
-        const minutos = String(data.getMinutes()).padStart(2, '0');
-        return `${horas}:${minutos}`;
-    }
-
     // 1. PROTEGER A PÁGINA
     protectPage();
     
@@ -28,6 +19,7 @@
     const formContainer = document.getElementById('formAulaContainer');
     const formAula = document.getElementById('formAula');
     const btnCancelar = document.getElementById('btnCancelar');
+    const btnCancelarForm = document.getElementById('btnCancelarForm');
     const formTitle = document.getElementById('formTitle');
     const aulaIdInput = document.getElementById('aulaId');
     const loadingAulas = document.getElementById('loadingAulas');
@@ -35,47 +27,54 @@
     const errorAulas = document.getElementById('errorAulas');
     const formSuccess = document.getElementById('formSuccess');
     const formError = document.getElementById('formError');
+    const totalAulas = document.getElementById('totalAulas');
     
-    // 5. CARREGAR LISTA DE AULAS
+    // Filtros
+    const filtroTipo = document.getElementById('filtroTipo');
+    const filtroInstrutor = document.getElementById('filtroInstrutor');
+    const filtroData = document.getElementById('filtroData');
+    const btnAplicarFiltros = document.getElementById('btnAplicarFiltros');
+    const btnLimparFiltros = document.getElementById('btnLimparFiltros');
+    
+    let aulasCache = []; // Cache para filtros
+    
+    // 5. FUNÇÃO: Formatar data e hora
+    function formatarDataHora(dataHora) {
+      if (!dataHora) return 'Não definido';
+      const data = new Date(dataHora);
+      return data.toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    function formatarHorario(dataHora) {
+      if (!dataHora) return '';
+      const data = new Date(dataHora);
+      return String(data.getHours()).padStart(2, '0') + ':' + 
+             String(data.getMinutes()).padStart(2, '0');
+    }
+    
+    function formatarData(dataHora) {
+      if (!dataHora) return '';
+      const data = new Date(dataHora);
+      return data.toISOString().split('T')[0];
+    }
+    
+    // 6. CARREGAR E RENDERIZAR AULAS
     async function carregarAulas() {
       try {
-        loadingAulas.style.display = 'block';
+        loadingAulas.style.display = 'flex';
         errorAulas.style.display = 'none';
         aulasContainer.innerHTML = '';
         
         const aulas = await getJsonAuth('/api/aulas');
+        aulasCache = aulas; // Salvar no cache
         
-        loadingAulas.style.display = 'none';
-        
-        if (aulas.length === 0) {
-          aulasContainer.innerHTML = '<p>Nenhuma aula cadastrada.</p>';
-          return;
-        }
-        
-        // Renderizar aulas
-        const html = aulas.map(aula => `
-        <div class="card" style="margin-bottom: 15px; padding: 15px;">
-            <h4>${aula.nome}</h4>
-            <p><strong>Instrutor:</strong> ${aula.instrutor || 'Não informado'}</p>
-            <p><strong>Horário:</strong> ${formatarHorario(aula.data_hora)}</p>
-            <p><strong>Vagas:</strong> ${aula.vagas_totais}</p>
-            <p><strong>Tipo:</strong> ${aula.tipo_aula || 'Regular'}</p>
-            <button class="btn-secondary btn-editar" data-id="${aula.id}">Editar</button>
-            <button class="btn-danger btn-deletar" data-id="${aula.id}">Deletar</button>
-        </div>
-        `).join('');
-
-        aulasContainer.innerHTML = html;
-        
-        // Adicionar eventos aos botões
-        document.querySelectorAll('.btn-editar').forEach(btn => {
-            btn.addEventListener('click', () => editarAula(btn.dataset.id));
-        });
-        
-        document.querySelectorAll('.btn-deletar').forEach(btn => {
-            btn.addEventListener('click', () => deletarAula(btn.dataset.id));
-        });
-
+        renderizarAulas(aulas);
         
       } catch (error) {
         loadingAulas.style.display = 'none';
@@ -84,23 +83,114 @@
       }
     }
     
-    // 6. ABRIR FORMULÁRIO DE NOVA AULA
+    // 7. RENDERIZAR AULAS EM TABELA
+    function renderizarAulas(aulas) {
+      loadingAulas.style.display = 'none';
+      
+      totalAulas.textContent = `${aulas.length} ${aulas.length === 1 ? 'aula' : 'aulas'}`;
+      
+      if (aulas.length === 0) {
+        aulasContainer.innerHTML = '<p class="sem-resultados"><i class="bi bi-inbox"></i> Nenhuma aula encontrada</p>';
+        return;
+      }
+      
+      const html = `
+        <table class="table-aulas">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Instrutor</th>
+              <th>Data/Hora</th>
+              <th>Vagas</th>
+              <th>Tipo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${aulas.map(aula => `
+              <tr>
+                <td data-label="Nome">${aula.nome}</td>
+                <td data-label="Instrutor">${aula.instrutor || '-'}</td>
+                <td data-label="Data/Hora">${formatarDataHora(aula.data_hora)}</td>
+                <td data-label="Vagas">${aula.vagas_totais}</td>
+                <td data-label="Tipo">
+                  <span class="badge badge-${aula.tipo_aula.toLowerCase()}">${aula.tipo_aula}</span>
+                </td>
+                <td data-label="Ações" class="actions-cell">
+                  <button class="btn-icon btn-editar" data-id="${aula.id}" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn-icon btn-deletar" data-id="${aula.id}" title="Deletar">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      aulasContainer.innerHTML = html;
+      
+      // Adicionar eventos aos botões
+      document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', () => editarAula(btn.dataset.id));
+      });
+      
+      document.querySelectorAll('.btn-deletar').forEach(btn => {
+        btn.addEventListener('click', () => deletarAula(btn.dataset.id));
+      });
+    }
+    
+    // 8. FILTRAR AULAS
+    function filtrarAulas() {
+      const tipo = filtroTipo.value.toLowerCase();
+      const instrutor = filtroInstrutor.value.toLowerCase();
+      const data = filtroData.value;
+      
+      const aulasFiltradas = aulasCache.filter(aula => {
+        const matchTipo = !tipo || aula.tipo_aula.toLowerCase() === tipo;
+        const matchInstrutor = !instrutor || 
+          (aula.instrutor && aula.instrutor.toLowerCase().includes(instrutor));
+        const matchData = !data || formatarData(aula.data_hora) === data;
+        
+        return matchTipo && matchInstrutor && matchData;
+      });
+      
+      renderizarAulas(aulasFiltradas);
+    }
+    
+    // 9. LIMPAR FILTROS
+    function limparFiltros() {
+      filtroTipo.value = '';
+      filtroInstrutor.value = '';
+      filtroData.value = '';
+      renderizarAulas(aulasCache);
+    }
+    
+    // 10. ABRIR FORMULÁRIO DE NOVA AULA
     btnNovaAula.addEventListener('click', () => {
-      formTitle.textContent = 'Cadastrar Nova Aula';
+      formTitle.innerHTML = '<i class="bi bi-plus-circle"></i> Cadastrar Nova Aula';
       formAula.reset();
       aulaIdInput.value = '';
       formContainer.style.display = 'block';
       formSuccess.style.display = 'none';
       formError.style.display = 'none';
+      formContainer.scrollIntoView({ behavior: 'smooth' });
     });
     
-    // 7. CANCELAR FORMULÁRIO
-    btnCancelar.addEventListener('click', () => {
+    // 11. CANCELAR FORMULÁRIO
+    function fecharFormulario() {
       formContainer.style.display = 'none';
       formAula.reset();
-    });
+      formSuccess.style.display = 'none';
+      formError.style.display = 'none';
+    }
     
-    // 8. SUBMETER FORMULÁRIO
+    btnCancelar.addEventListener('click', fecharFormulario);
+    btnCancelarForm.addEventListener('click', fecharFormulario);
+    
+    // 12. SUBMETER FORMULÁRIO
     formAula.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -108,52 +198,63 @@
       formError.style.display = 'none';
       
       const formData = new FormData(formAula);
-        const aulaData = {
+      
+      // Combinar data e hora
+      const data = formData.get('data');
+      const horario = formData.get('horario');
+      const dataHora = `${data}T${horario}:00`;
+      
+      const aulaData = {
         nome: formData.get('nome'),
-        instrutor: formData.get('instrutor'),
-        data_hora: formData.get('data_hora'),
+        instrutor: formData.get('instrutor') || null,
+        data_hora: dataHora,
         vagas_totais: parseInt(formData.get('vagas_totais')),
         tipo_aula: formData.get('tipo_aula')
-        };
+      };
       
       const aulaId = aulaIdInput.value;
       
       try {
-        let result;
         if (aulaId) {
           // Atualizar aula existente
-          result = await fetch(`/api/aulas/${aulaId}`, {
+          await fetch(`/api/aulas/${aulaId}`, {
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify(aulaData)
           });
+          
+          // ✅ TOAST DE SUCESSO
+          showSuccessToast('Aula atualizada com sucesso!');
         } else {
           // Criar nova aula
-          result = await postJsonAuth('/api/aulas', aulaData);
+          await postJsonAuth('/api/aulas', aulaData);
+          
+          // ✅ TOAST DE SUCESSO
+          showSuccessToast('Aula criada com sucesso!');
         }
         
-        formSuccess.textContent = aulaId ? 'Aula atualizada com sucesso!' : 'Aula criada com sucesso!';
-        formSuccess.style.display = 'block';
-        
-        formAula.reset();
-        formContainer.style.display = 'none';
+        fecharFormulario();
         carregarAulas();
         
       } catch (error) {
+        // ✅ TOAST DE ERRO
+        showErrorToast(error.message || 'Erro ao salvar aula');
+        
         formError.textContent = error.message || 'Erro ao salvar aula';
         formError.style.display = 'block';
       }
     });
     
-    // 9. EDITAR AULA
+    // 13. EDITAR AULA
     async function editarAula(id) {
-    try {
+      try {
         const aula = await getJsonAuth(`/api/aulas/${id}`);
         
-        formTitle.textContent = 'Editar Aula';
+        formTitle.innerHTML = '<i class="bi bi-pencil-square"></i> Editar Aula';
         aulaIdInput.value = aula.id;
         document.getElementById('aulaNome').value = aula.nome;
         document.getElementById('aulaInstrutor').value = aula.instrutor || '';
+        document.getElementById('aulaData').value = formatarData(aula.data_hora);
         document.getElementById('aulaHorario').value = formatarHorario(aula.data_hora);
         document.getElementById('aulaVagas').value = aula.vagas_totais;
         document.getElementById('aulaTipo').value = aula.tipo_aula || 'Regular';
@@ -161,28 +262,34 @@
         formContainer.style.display = 'block';
         formSuccess.style.display = 'none';
         formError.style.display = 'none';
+        formContainer.scrollIntoView({ behavior: 'smooth' });
         
-    } catch (error) {
-        alert('Erro ao carregar aula: ' + error.message);
-    }
+      } catch (error) {
+        showErrorToast('Erro ao carregar aula: ' + error.message);
+      }
     }
     
-    // 10. DELETAR AULA
+    // 14. DELETAR AULA
     async function deletarAula(id) {
-    if (!confirm('Tem certeza que deseja deletar esta aula?')) return;
-    
-    try {
+      if (!confirm('Tem certeza que deseja deletar esta aula? Esta ação não pode ser desfeita.')) {
+        return;
+      }
+      
+      try {
         await fetch(`/api/aulas/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders()
+          method: 'DELETE',
+          headers: getAuthHeaders()
         });
         
-        alert('Aula deletada com sucesso!');
+        // ✅ TOAST DE SUCESSO
+        showSuccessToast('Aula deletada com sucesso!');
+        
         carregarAulas();
         
-    } catch (error) {
-        alert('Erro ao deletar aula: ' + error.message);
-    }
+      } catch (error) {
+        // ✅ TOAST DE ERRO
+        showErrorToast('Erro ao deletar aula: ' + error.message);
+      }
     }
     
     // Função auxiliar para headers
@@ -193,6 +300,15 @@
         'Authorization': `Bearer ${token}`
       };
     }
+    
+    // 15. EVENT LISTENERS FILTROS
+    btnAplicarFiltros.addEventListener('click', filtrarAulas);
+    btnLimparFiltros.addEventListener('click', limparFiltros);
+    
+    // Filtrar ao pressionar Enter nos campos
+    filtroInstrutor.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') filtrarAulas();
+    });
     
     // CARREGAR AULAS AO INICIAR
     carregarAulas();
