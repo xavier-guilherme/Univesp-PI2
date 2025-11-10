@@ -83,7 +83,7 @@
       }
     }
     
-    // 6. CARREGAR MEUS AGENDAMENTOS
+    // 6. CARREGAR MEUS AGENDAMENTOS (VERSÃO MELHORADA COM STATUS CHECK-IN)
     async function carregarMeusAgendamentos() {
       try {
         loadingAgendamentos.style.display = 'block';
@@ -95,35 +95,103 @@
         loadingAgendamentos.style.display = 'none';
         
         if (agendamentos.length === 0) {
-          meusAgendamentos.innerHTML = '<p>Você ainda não tem agendamentos.</p>';
+          meusAgendamentos.innerHTML = `
+            <div class="sem-agendamentos">
+              <i class="bi bi-calendar-x"></i>
+              <p>Você ainda não tem agendamentos.</p>
+            </div>
+          `;
           return;
         }
         
         const html = agendamentos.map(ag => {
           const checkinFeito = ag.checkin_feito > 0;
-          const podeCheckinAgora = podeCheckin(ag.data_hora);
+          const dataHoraAula = new Date(ag.data_hora);
+          const agora = new Date();
+          const diffMinutos = Math.round((dataHoraAula - agora) / 1000 / 60);
+          const podeCheckinAgora = diffMinutos <= 30 && diffMinutos >= -30;
+          const aulaPassada = diffMinutos < -30;
+          
+          // Status visual do check-in
+          let statusCheckin = '';
+          if (checkinFeito) {
+            statusCheckin = `
+              <div class="checkin-status checkin-realizado">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Check-in realizado</span>
+              </div>
+            `;
+          } else if (aulaPassada) {
+            statusCheckin = `
+              <div class="checkin-status checkin-perdido">
+                <i class="bi bi-x-circle-fill"></i>
+                <span>Check-in não realizado</span>
+              </div>
+            `;
+          } else if (podeCheckinAgora) {
+            statusCheckin = `
+              <div class="checkin-status checkin-disponivel">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>Check-in disponível agora!</span>
+                <button class="btn-checkin-ativo btn-checkin" data-id="${ag.agendamento_id}">
+                  <i class="bi bi-check-circle"></i> Fazer Check-in
+                </button>
+              </div>
+            `;
+          } else {
+            const minutosRestantes = diffMinutos > 0 ? diffMinutos : 0;
+            const horasRestantes = Math.floor(minutosRestantes / 60);
+            const minsRestantes = minutosRestantes % 60;
+            
+            let tempoTexto = '';
+            if (horasRestantes > 0) {
+              tempoTexto = `${horasRestantes}h ${minsRestantes}min`;
+            } else {
+              tempoTexto = `${minsRestantes} minutos`;
+            }
+            
+            statusCheckin = `
+              <div class="checkin-status checkin-aguardando">
+                <i class="bi bi-clock-fill"></i>
+                <span>Check-in disponível em <strong>${tempoTexto}</strong></span>
+                <small>Disponível 30 min antes da aula</small>
+              </div>
+            `;
+          }
           
           return `
-            <div class="card" style="margin-bottom: 15px; padding: 15px; ${checkinFeito ? 'border-left: 4px solid #28a745;' : ''}">
-              <h4>${ag.aula_nome}</h4>
-              <p><strong>Instrutor:</strong> ${ag.instrutor || 'Não informado'}</p>
-              <p><strong>Horário:</strong> ${formatarHorario(ag.data_hora)}</p>
-              <p><strong>Tipo:</strong> ${ag.tipo_aula || 'Regular'}</p>
-              <p><strong>Agendado em:</strong> ${new Date(ag.data_agendamento).toLocaleDateString('pt-BR')}</p>
+            <div class="agendamento-card ${checkinFeito ? 'agendamento-confirmado' : ''}">
+              <div class="agendamento-header">
+                <h4><i class="bi bi-water"></i> ${ag.aula_nome}</h4>
+                ${checkinFeito ? '<span class="badge-confirmado">Confirmado</span>' : ''}
+              </div>
               
-              ${checkinFeito 
-                ? '<p style="color: #28a745; font-weight: bold;"><i class="bi bi-check-circle"></i> Check-in realizado</p>'
-                : podeCheckinAgora
-                  ? `<button class="btn-primary btn-checkin" data-id="${ag.agendamento_id}">
-                      <i class="bi bi-geo-alt"></i> Fazer Check-in
-                    </button>`
-                  : '<p style="color: #6c757d;">Check-in disponível 30 min antes/depois da aula</p>'
-              }
+              <div class="agendamento-info">
+                <div class="info-row">
+                  <i class="bi bi-person"></i>
+                  <span><strong>Instrutor:</strong> ${ag.instrutor || 'Não informado'}</span>
+                </div>
+                <div class="info-row">
+                  <i class="bi bi-calendar"></i>
+                  <span><strong>Data:</strong> ${dataHoraAula.toLocaleDateString('pt-BR')}</span>
+                </div>
+                <div class="info-row">
+                  <i class="bi bi-clock"></i>
+                  <span><strong>Horário:</strong> ${formatarHorario(ag.data_hora)}</span>
+                </div>
+                <div class="info-row">
+                  <i class="bi bi-tag"></i>
+                  <span><strong>Tipo:</strong> ${ag.tipo_aula || 'Regular'}</span>
+                </div>
+              </div>
               
-              ${!checkinFeito 
-                ? `<button class="btn-danger btn-cancelar" data-id="${ag.agendamento_id}">Cancelar Agendamento</button>`
-                : ''
-              }
+              ${statusCheckin}
+              
+              ${!checkinFeito && !aulaPassada ? `
+                <button class="btn-cancelar-agendamento" data-id="${ag.agendamento_id}">
+                  <i class="bi bi-x-circle"></i> Cancelar Agendamento
+                </button>
+              ` : ''}
             </div>
           `;
         }).join('');
@@ -136,7 +204,7 @@
         });
         
         // Adicionar eventos aos botões de cancelar
-        document.querySelectorAll('.btn-cancelar').forEach(btn => {
+        document.querySelectorAll('.btn-cancelar-agendamento').forEach(btn => {
           btn.addEventListener('click', () => cancelarAgendamento(btn.dataset.id));
         });
         
@@ -146,7 +214,7 @@
         errorAgendamentos.style.display = 'block';
       }
     }
-    
+
     // 7. AGENDAR AULA
     async function agendarAula(aulaId) {
       try {

@@ -1,26 +1,74 @@
 <section class="pagina-conteudo admin-checkins-page" data-aos="fade-up">
   
+  <!-- Verificação de permissão -->
   <div id="accessDenied" style="display: none;" class="alert alert-danger">
     <h3>Acesso Negado</h3>
     <p>Esta área é restrita a administradores.</p>
   </div>
 
+  <!-- Conteúdo Admin -->
   <div id="adminContent" style="display: none;">
     
-    <h2>Check-ins Realizados</h2>
-    
+    <div class="page-header">
+      <h2><i class="bi bi-check-circle"></i> Check-ins Realizados</h2>
+    </div>
+
     <!-- Filtros -->
-    <div class="filters" style="margin-bottom: 20px;">
-      <label for="filtroAula">Filtrar por aula:</label>
-      <select id="filtroAula">
-        <option value="">Todas as aulas</option>
-      </select>
+    <div class="filtros-container">
+      <h3><i class="bi bi-funnel"></i> Filtrar Check-ins</h3>
+      <div class="filtros-grid">
+        <div class="filtro-item">
+          <label for="filtroDataCheckin">
+            <i class="bi bi-calendar"></i> Data
+          </label>
+          <input type="date" id="filtroDataCheckin" class="form-control">
+        </div>
+
+        <div class="filtro-item">
+          <label for="filtroAulaCheckin">
+            <i class="bi bi-water"></i> Aula
+          </label>
+          <select id="filtroAulaCheckin" class="form-control">
+            <option value="">Todas as aulas</option>
+          </select>
+        </div>
+
+        <div class="filtro-item">
+          <label for="filtroAlunoCheckin">
+            <i class="bi bi-person"></i> Aluno
+          </label>
+          <input type="text" id="filtroAlunoCheckin" class="form-control" 
+                 placeholder="Nome do aluno">
+        </div>
+
+        <div class="filtro-item filtro-actions">
+          <button id="btnAplicarFiltrosCheckin" class="btn-primary btn-filtro">
+            <i class="bi bi-search"></i> Filtrar
+          </button>
+          <button id="btnLimparFiltrosCheckin" class="btn-secondary btn-filtro">
+            <i class="bi bi-x-circle"></i> Limpar
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Lista de Check-ins -->
-    <div id="loadingCheckins" style="text-align: center;">Carregando...</div>
-    <div id="checkinsContainer"></div>
-    <div id="errorCheckins" class="alert alert-danger" style="display: none;"></div>
+    <div class="lista-container">
+      <div class="lista-header">
+        <h3><i class="bi bi-list-check"></i> Registros de Check-in</h3>
+        <span id="totalCheckins" class="badge-total">0 check-ins</span>
+      </div>
+      
+      <div id="loadingCheckins" class="loading-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p>Carregando check-ins...</p>
+      </div>
+      
+      <div id="checkinsContainer" class="table-responsive"></div>
+      <div id="errorCheckins" class="alert alert-danger" style="display: none;"></div>
+    </div>
 
   </div>
 </section>
