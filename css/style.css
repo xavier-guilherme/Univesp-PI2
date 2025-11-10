@@ -2550,3 +2550,48 @@ body.dark-mode .sem-resultados {
     justify-content: flex-end;
   }
 }
+
+/* =====================================================
+   ✏️ EDIÇÃO DE PERFIL - FASE 3
+   ===================================================== */
+
+.form-editar-perfil {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  animation: fadeIn .3s;
+}
+
+body.dark-mode .form-editar-perfil {
+  background-color: #232323;
+}
+
+/* Campos */
+.form-row {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.form-editar-perfil .form-group {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Ações */
+.form-editar-perfil .form-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
