@@ -29,17 +29,28 @@ async function submitLoginForm(event) {
     saveToken(jwt);             // de auth.js (agora salva em 'token')
     if (data.user?.name) {
       localStorage.setItem('userName', data.user.name);
-      localStorage.setItem('userPerfil', data.user.perfil); // ← LINHA ADICIONADA
+      localStorage.setItem('userPerfil', data.user.perfil);
     }
     if (typeof updateNavUI === 'function') updateNavUI();
 
-    if (typeof window.carregarPagina === 'function') {
-      window.carregarPagina('paginas/perfil.html');
-    } else {
-      window.location.reload();
-    }
+    // ✅ TOAST DE SUCESSO
+    showSuccessToast(`Bem-vindo! Login realizado com sucesso.`);
+
+    // Aguarda um pouco para o toast aparecer antes de redirecionar
+    setTimeout(() => {
+      if (typeof window.carregarPagina === 'function') {
+        window.carregarPagina('paginas/perfil.html');
+      } else {
+        window.location.reload();
+      }
+    }, 1000);
+
   } catch (error) {
     console.error('Erro durante o login:', error);
+    
+    // ✅ TOAST DE ERRO
+    showErrorToast(error.message || 'Credenciais inválidas ou erro no servidor.');
+    
     if (errorMessageDiv) {
       errorMessageDiv.textContent = error.message || 'Credenciais inválidas ou erro no servidor.';
       errorMessageDiv.style.display = 'block';

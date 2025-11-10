@@ -151,10 +151,15 @@
     async function agendarAula(aulaId) {
       try {
         await postJsonAuth('/api/agendamentos', { aula_id: aulaId });
-        alert('Agendamento realizado com sucesso!');
+        
+        // ✅ TOAST DE SUCESSO
+        showSuccessToast('Agendamento realizado com sucesso!');
+        
         carregarMeusAgendamentos();
+        carregarAulasDisponiveis();
       } catch (error) {
-        alert('Erro ao agendar: ' + error.message);
+        // ✅ TOAST DE ERRO
+        showErrorToast('Erro ao agendar: ' + error.message);
       }
     }
     
@@ -170,10 +175,14 @@
                   localizacao_lat: position.coords.latitude,
                   localizacao_lng: position.coords.longitude
                 });
-                alert('Check-in realizado com sucesso!');
+                
+                // ✅ TOAST DE SUCESSO
+                showSuccessToast('Check-in realizado com sucesso!');
+                
                 carregarMeusAgendamentos();
               } catch (error) {
-                alert('Erro ao fazer check-in: ' + error.message);
+                // ✅ TOAST DE ERRO
+                showErrorToast('Erro ao fazer check-in: ' + error.message);
               }
             },
             async (error) => {
@@ -181,21 +190,29 @@
               console.warn('Localização negada:', error);
               try {
                 await postJsonAuth(`/api/agendamentos/${agendamentoId}/checkin`, {});
-                alert('Check-in realizado com sucesso (sem localização)!');
+                
+                // ✅ TOAST DE SUCESSO
+                showSuccessToast('Check-in realizado com sucesso (sem localização)!');
+                
                 carregarMeusAgendamentos();
               } catch (error) {
-                alert('Erro ao fazer check-in: ' + error.message);
+                // ✅ TOAST DE ERRO
+                showErrorToast('Erro ao fazer check-in: ' + error.message);
               }
             }
           );
         } else {
           // Navegador não suporta geolocalização
           await postJsonAuth(`/api/agendamentos/${agendamentoId}/checkin`, {});
-          alert('Check-in realizado com sucesso!');
+          
+          // ✅ TOAST DE SUCESSO
+          showSuccessToast('Check-in realizado com sucesso!');
+          
           carregarMeusAgendamentos();
         }
       } catch (error) {
-        alert('Erro ao fazer check-in: ' + error.message);
+        // ✅ TOAST DE ERRO
+        showErrorToast('Erro ao fazer check-in: ' + error.message);
       }
     }
     
@@ -212,11 +229,15 @@
           }
         });
         
-        alert('Agendamento cancelado com sucesso!');
+        // ✅ TOAST DE SUCESSO
+        showSuccessToast('Agendamento cancelado com sucesso!');
+        
         carregarMeusAgendamentos();
+        carregarAulasDisponiveis();
         
       } catch (error) {
-        alert('Erro ao cancelar agendamento: ' + error.message);
+        // ✅ TOAST DE ERRO
+        showErrorToast('Erro ao cancelar agendamento: ' + error.message);
       }
     }
     

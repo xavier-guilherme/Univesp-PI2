@@ -39,6 +39,9 @@
                 // Enviar para API
                 const result = await postJsonAuth('/api/user/create', studentData);
                 
+                // ✅ TOAST DE SUCESSO
+                showSuccessToast(`Aluno "${result.user.nome}" cadastrado com sucesso!`);
+                
                 // Sucesso
                 successDiv.textContent = `Aluno "${result.user.nome}" cadastrado com sucesso!`;
                 successDiv.style.display = 'block';
@@ -47,6 +50,9 @@
                 form.reset();
                 
             } catch (error) {
+                // ✅ TOAST DE ERRO
+                showErrorToast(error.message || 'Erro ao cadastrar aluno');
+                
                 // Erro
                 errorDiv.textContent = error.message || 'Erro ao cadastrar aluno';
                 errorDiv.style.display = 'block';
