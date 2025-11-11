@@ -1,23 +1,78 @@
 <section class="pagina-conteudo agendamentos-page" data-aos="fade-up">
   
-  <h2>Meus Agendamentos</h2>
+  <h2><i class="bi bi-calendar-check"></i> Meus Agendamentos</h2>
   
-  <!-- Seção: Aulas Disponíveis -->
-  <div class="section-container">
-    <h3>Aulas Disponíveis para Agendamento</h3>
-    <div id="loadingAulas" style="text-align: center;">Carregando aulas...</div>
-    <div id="aulasDisponiveis"></div>
-    <div id="errorAulas" class="alert alert-danger" style="display: none;"></div>
+  <!-- Navegação de Visualização -->
+  <div class="view-toggle">
+    <button id="btnViewCalendar" class="btn-view active">
+      <i class="bi bi-calendar3"></i> Calendário
+    </button>
+    <button id="btnViewList" class="btn-view">
+      <i class="bi bi-list-ul"></i> Lista
+    </button>
   </div>
 
-  <hr style="margin: 30px 0;">
+  <!-- VISUALIZAÇÃO EM CALENDÁRIO -->
+  <div id="calendarView" class="calendar-container">
+    
+    <!-- Controles do Calendário -->
+    <div class="calendar-header">
+      <button id="btnPrevMonth" class="btn-month">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h3 id="currentMonth">Novembro 2025</h3>
+      <button id="btnNextMonth" class="btn-month">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
 
-  <!-- Seção: Meus Agendamentos -->
-  <div class="section-container">
-    <h3>Minhas Aulas Agendadas</h3>
-    <div id="loadingAgendamentos" style="text-align: center;">Carregando agendamentos...</div>
-    <div id="meusAgendamentos"></div>
-    <div id="errorAgendamentos" class="alert alert-danger" style="display: none;"></div>
+    <!-- Grade do Calendário -->
+    <div class="calendar-grid" id="calendarGrid">
+      <!-- Cabeçalho dos dias da semana -->
+      <div class="calendar-day-header">Dom</div>
+      <div class="calendar-day-header">Seg</div>
+      <div class="calendar-day-header">Ter</div>
+      <div class="calendar-day-header">Qua</div>
+      <div class="calendar-day-header">Qui</div>
+      <div class="calendar-day-header">Sex</div>
+      <div class="calendar-day-header">Sáb</div>
+      <!-- Os dias serão gerados dinamicamente -->
+    </div>
+
+    <!-- Cards de Aulas do Dia Selecionado -->
+    <div id="aulasDoDay" class="aulas-dia-container" style="display: none;">
+      <div class="aulas-dia-header">
+        <h4 id="diaSelecionadoTitulo">Aulas de 10/11/2025</h4>
+        <button class="btn-fechar-dia" onclick="fecharAulasDia()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div id="aulasDoDay-content"></div>
+    </div>
+
+  </div>
+
+  <!-- VISUALIZAÇÃO EM LISTA (Original) -->
+  <div id="listView" style="display: none;">
+    
+    <!-- Seção: Aulas Disponíveis -->
+    <div class="section-container">
+      <h3>Aulas Disponíveis para Agendamento</h3>
+      <div id="loadingAulas" style="text-align: center;">Carregando aulas...</div>
+      <div id="aulasDisponiveis"></div>
+      <div id="errorAulas" class="alert alert-danger" style="display: none;"></div>
+    </div>
+
+    <hr style="margin: 30px 0;">
+
+    <!-- Seção: Meus Agendamentos -->
+    <div class="section-container">
+      <h3>Minhas Aulas Agendadas</h3>
+      <div id="loadingAgendamentos" style="text-align: center;">Carregando agendamentos...</div>
+      <div id="meusAgendamentos"></div>
+      <div id="errorAgendamentos" class="alert alert-danger" style="display: none;"></div>
+    </div>
+
   </div>
 
 </section>

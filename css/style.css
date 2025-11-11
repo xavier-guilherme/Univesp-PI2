@@ -2892,3 +2892,439 @@ body.dark-mode .sem-agendamentos {
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
+/* =====================================================
+   📅 CALENDÁRIO DE AGENDAMENTOS - FEEDBACK MANUS
+   ===================================================== */
+
+/* Toggle de Visualização */
+.view-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  justify-content: center;
+}
+
+.btn-view {
+  padding: 12px 24px;
+  border: 2px solid var(--cor-primaria);
+  background: transparent;
+  color: var(--cor-primaria);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-view:hover {
+  background-color: rgba(146, 92, 10, 0.1);
+}
+
+.btn-view.active {
+  background-color: var(--cor-primaria);
+  color: white;
+}
+
+body.dark-mode .btn-view {
+  border-color: #ffcc70;
+  color: #ffcc70;
+}
+
+body.dark-mode .btn-view.active {
+  background-color: #ffcc70;
+  color: #121212;
+}
+
+/* Container do Calendário */
+.calendar-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+body.dark-mode .calendar-container {
+  background-color: #2a2a2a;
+}
+
+/* Header do Calendário */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+body.dark-mode .calendar-header {
+  border-bottom-color: #444;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+body.dark-mode .calendar-header h3 {
+  color: #ffcc70;
+}
+
+.btn-month {
+  background: none;
+  border: 2px solid var(--cor-primaria);
+  color: var(--cor-primaria);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-month:hover {
+  background-color: var(--cor-primaria);
+  color: white;
+  transform: scale(1.1);
+}
+
+body.dark-mode .btn-month {
+  border-color: #ffcc70;
+  color: #ffcc70;
+}
+
+body.dark-mode .btn-month:hover {
+  background-color: #ffcc70;
+  color: #121212;
+}
+
+/* Grade do Calendário */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+/* Cabeçalho dos Dias da Semana */
+.calendar-day-header {
+  text-align: center;
+  font-weight: 600;
+  padding: 12px;
+  color: var(--cor-primaria);
+  font-size: 0.9rem;
+  background-color: rgba(146, 92, 10, 0.1);
+  border-radius: 6px;
+}
+
+body.dark-mode .calendar-day-header {
+  color: #ffcc70;
+  background-color: rgba(255, 204, 112, 0.1);
+}
+
+/* Células dos Dias */
+.calendar-day {
+  aspect-ratio: 1;
+  min-height: 80px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.calendar-day:hover {
+  border-color: var(--cor-primaria);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .calendar-day {
+  background-color: #1e1e1e;
+  border-color: #444;
+}
+
+body.dark-mode .calendar-day:hover {
+  border-color: #ffcc70;
+}
+
+/* Dia Vazio */
+.calendar-day-empty {
+  border: none;
+  cursor: default;
+  background: transparent;
+}
+
+.calendar-day-empty:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Número do Dia */
+.day-number {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: 4px;
+}
+
+body.dark-mode .day-number {
+  color: var(--cor-texto-dark);
+}
+
+/* Dia com Aulas */
+.calendar-day-with-classes {
+  border-color: #007bff;
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.05), #fff);
+}
+
+body.dark-mode .calendar-day-with-classes {
+  border-color: #007bff;
+  background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), #1e1e1e);
+}
+
+/* Dia Agendado (pelo aluno) */
+.calendar-day-scheduled {
+  border-color: #28a745;
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), #fff);
+}
+
+body.dark-mode .calendar-day-scheduled {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), #1e1e1e);
+}
+
+/* Dia Atual */
+.calendar-day-today {
+  border-color: var(--cor-primaria);
+  border-width: 3px;
+  background: linear-gradient(135deg, rgba(146, 92, 10, 0.1), #fff);
+}
+
+body.dark-mode .calendar-day-today {
+  border-color: #ffcc70;
+  background: linear-gradient(135deg, rgba(255, 204, 112, 0.15), #1e1e1e);
+}
+
+.calendar-day-today .day-number {
+  color: var(--cor-primaria);
+  font-weight: 700;
+}
+
+body.dark-mode .calendar-day-today .day-number {
+  color: #ffcc70;
+}
+
+/* Marcador de Quantidade de Aulas */
+.day-marker {
+  background-color: #007bff;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-top: auto;
+}
+
+/* Container de Aulas do Dia */
+.aulas-dia-container {
+  margin-top: 30px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  animation: slideDown 0.3s ease;
+}
+
+body.dark-mode .aulas-dia-container {
+  background-color: #1e1e1e;
+}
+
+.aulas-dia-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+body.dark-mode .aulas-dia-header {
+  border-bottom-color: #444;
+}
+
+.aulas-dia-header h4 {
+  margin: 0;
+  color: var(--cor-primaria);
+}
+
+body.dark-mode .aulas-dia-header h4 {
+  color: #ffcc70;
+}
+
+.btn-fechar-dia {
+  background: #dc3545;
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-fechar-dia:hover {
+  background: #c82333;
+  transform: rotate(90deg);
+}
+
+/* Card de Aula no Calendário */
+.aula-card-calendario {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--cor-primaria);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.aula-card-calendario:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateX(5px);
+}
+
+body.dark-mode .aula-card-calendario {
+  background-color: #2a2a2a;
+  border-left-color: #ffcc70;
+}
+
+.aula-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.aula-card-header h4 {
+  margin: 0;
+  color: var(--cor-texto);
+  font-size: 1.2rem;
+}
+
+body.dark-mode .aula-card-header h4 {
+  color: var(--cor-texto-dark);
+}
+
+.aula-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cor-texto);
+}
+
+body.dark-mode .info-item {
+  color: var(--cor-texto-dark);
+}
+
+.info-item i {
+  color: var(--cor-primaria);
+  font-size: 1.1rem;
+  width: 20px;
+}
+
+body.dark-mode .info-item i {
+  color: #ffcc70;
+}
+
+.aula-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.badge-agendado {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Responsivo Mobile */
+@media (max-width: 768px) {
+  .calendar-grid {
+    gap: 4px;
+  }
+  
+  .calendar-day {
+    min-height: 60px;
+    padding: 4px;
+  }
+  
+  .day-number {
+    font-size: 0.9rem;
+  }
+  
+  .day-marker {
+    font-size: 0.7rem;
+    padding: 1px 6px;
+  }
+  
+  .calendar-day-header {
+    font-size: 0.75rem;
+    padding: 8px 4px;
+  }
+  
+  .view-toggle {
+    flex-direction: column;
+  }
+  
+  .btn-view {
+    width: 100%;
+  }
+  
+  .aula-card-calendario {
+    padding: 15px;
+  }
+  
+  .aula-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .aula-card-actions {
+    width: 100%;
+  }
+  
+  .aula-card-actions button {
+    width: 100%;
+  }
+}
