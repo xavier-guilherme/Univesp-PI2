@@ -37,7 +37,8 @@
                 </div>
                 <h3>Agendar Aula</h3>
                 <p>Reserve sua próxima aula</p>
-                <a href="#" class="linkMenu btn-acao" data-page="paginas/meus-agendamentos.html">
+                <!-- ✅ LINK ATUALIZADO -->
+                <a href="#" class="linkMenu btn-acao" data-page="paginas/agendar-aulas.html">
                     <i class="bi bi-arrow-right"></i> Acessar
                 </a>
             </div>
@@ -49,6 +50,7 @@
                 </div>
                 <h3>Meus Agendamentos</h3>
                 <p>Veja suas aulas agendadas</p>
+                <!-- ✅ LINK CORRETO MANTIDO -->
                 <a href="#" class="linkMenu btn-acao" data-page="paginas/meus-agendamentos.html">
                     <i class="bi bi-arrow-right"></i> Acessar
                 </a>
@@ -88,70 +90,65 @@
                         <p class="mt-2">Carregando informações...</p>
                     </div>
 
-                    <!-- Informações do Perfil -->
+                    <!-- Informações do Perfil (SIMPLIFICADO) -->
                     <div id="profileInfo" class="profile-info" style="display: none;">
-                        <div class="info-item">
-                            <strong>Nome:</strong> <span id="userNamePerfil"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Email:</strong> <span id="userEmail"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Telefone:</strong> <span id="userTelefone"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Data de Nascimento:</strong> <span id="userNascimento"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Tipo Sanguíneo:</strong> <span id="userTipoSanguineo"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Contato de Emergência:</strong> <span id="userContatoEmergencia"></span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Telefone de Emergência:</strong> <span id="userTelefoneEmergencia"></span>
-                        </div>
-                        <button class="btn-primary" onclick="tornarPerfilEditavel()" style="margin-top:15px;">
-                            <i class="bi bi-pencil"></i> Editar Perfil
-                        </button>
+                    <div class="info-item">
+                        <strong><i class="bi bi-person"></i> Nome:</strong> 
+                        <span id="userNamePerfil"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong><i class="bi bi-envelope"></i> Email:</strong> 
+                        <span id="userEmail"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong><i class="bi bi-telephone"></i> Telefone:</strong> 
+                        <span id="userTelefone"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong><i class="bi bi-calendar-heart"></i> Data de Nascimento:</strong> 
+                        <span id="userNascimento"></span>
+                    </div>
+                    
+                    <!-- Botão Editar Perfil -->
+                    <button class="btn-primary btn-editar-perfil" onclick="tornarPerfilEditavel()">
+                        <i class="bi bi-pencil-square"></i> Editar Perfil
+                    </button>
                     </div>
 
-                                        <!-- Formulário de edição de perfil -->
+                    <!-- Formulário de edição SIMPLIFICADO -->
                     <form id="formEditarPerfil" class="form-editar-perfil" style="display:none; margin-top:20px;">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="editNome">Nome</label>
-                                <input type="text" id="editNome" name="nome" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editTelefone">Telefone</label>
-                                <input type="text" id="editTelefone" name="telefone" placeholder="apenas números">
-                            </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                        <label for="editNome">
+                            <i class="bi bi-person"></i> Nome Completo <span class="required">*</span>
+                        </label>
+                        <input type="text" id="editNome" name="nome" required>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="editNascimento">Data de Nascimento</label>
-                                <input type="date" id="editNascimento" name="data_nascimento">
-                            </div>
-                            <div class="form-group">
-                                <label for="editTipoSanguineo">Tipo Sanguíneo</label>
-                                <input type="text" id="editTipoSanguineo" name="tipo_sanguineo" placeholder="Ex: O+">
-                            </div>
+                        <div class="form-group">
+                        <label for="editTelefone">
+                            <i class="bi bi-telephone"></i> Telefone
+                        </label>
+                        <input type="tel" id="editTelefone" name="telefone" placeholder="(XX) XXXXX-XXXX">
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="editContatoEmergencia">Contato de Emergência</label>
-                                <input type="text" id="editContatoEmergencia" name="contato_emergencia">
-                            </div>
-                            <div class="form-group">
-                                <label for="editTelefoneEmergencia">Telefone de Emergência</label>
-                                <input type="text" id="editTelefoneEmergencia" name="telefone_emergencia" placeholder="apenas números">
-                            </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                        <label for="editNascimento">
+                            <i class="bi bi-calendar-heart"></i> Data de Nascimento
+                        </label>
+                        <input type="date" id="editNascimento" name="data_nascimento">
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Salvar</button>
-                            <button type="button" class="btn-secondary" onclick="cancelarEdicaoPerfil()">Cancelar</button>
-                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                        <i class="bi bi-save"></i> Salvar Alterações
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="cancelarEdicaoPerfil()">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    </div>
                     </form>
 
                     <!-- Mensagem de Erro -->
@@ -234,7 +231,7 @@ async function carregarProximoAgendamento() {
                 <div class="sem-agendamento">
                     <i class="bi bi-calendar-x"></i>
                     <p>Você não possui agendamentos futuros</p>
-                    <a href="#" class="linkMenu btn-primary" data-page="paginas/meus-agendamentos.html">
+                    <a href="#" class="linkMenu btn-primary" data-page="paginas/agendar-aulas.html">
                         <i class="bi bi-calendar-plus"></i> Agendar Aula
                     </a>
                 </div>

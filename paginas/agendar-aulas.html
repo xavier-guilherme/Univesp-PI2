@@ -1,0 +1,72 @@
+<section class="pagina-conteudo agendar-page" data-aos="fade-up">
+  
+  <h2><i class="bi bi-calendar-plus"></i> Agendar Aulas</h2>
+  <p class="page-subtitle">Escolha uma aula disponível para agendar</p>
+  
+  <!-- Navegação de Visualização -->
+  <div class="view-toggle">
+    <button id="btnViewCalendar" class="btn-view active">
+      <i class="bi bi-calendar3"></i> Calendário
+    </button>
+    <button id="btnViewList" class="btn-view">
+      <i class="bi bi-list-ul"></i> Lista
+    </button>
+  </div>
+
+  <!-- VISUALIZAÇÃO EM CALENDÁRIO -->
+  <div id="calendarView" class="calendar-container">
+    
+    <!-- Controles do Calendário -->
+    <div class="calendar-header">
+      <button id="btnPrevMonth" class="btn-month">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h3 id="currentMonth">Novembro 2025</h3>
+      <button id="btnNextMonth" class="btn-month">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Grade do Calendário -->
+    <div class="calendar-grid" id="calendarGrid">
+      <!-- Cabeçalho dos dias da semana -->
+      <div class="calendar-day-header">Dom</div>
+      <div class="calendar-day-header">Seg</div>
+      <div class="calendar-day-header">Ter</div>
+      <div class="calendar-day-header">Qua</div>
+      <div class="calendar-day-header">Qui</div>
+      <div class="calendar-day-header">Sex</div>
+      <div class="calendar-day-header">Sáb</div>
+    </div>
+
+    <!-- Cards de Aulas do Dia Selecionado -->
+    <div id="aulasDoDay" class="aulas-dia-container" style="display: none;">
+      <div class="aulas-dia-header">
+        <h4 id="diaSelecionadoTitulo">Aulas de 10/11/2025</h4>
+        <button class="btn-fechar-dia" onclick="fecharAulasDia()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div id="aulasDoDay-content"></div>
+    </div>
+
+  </div>
+
+  <!-- VISUALIZAÇÃO EM LISTA -->
+  <div id="listView" style="display: none;">
+    
+    <div class="section-container">
+      <h3><i class="bi bi-water"></i> Aulas Disponíveis</h3>
+      <div id="loadingAulas" class="loading-container" style="display: none;">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p>Carregando aulas...</p>
+      </div>
+      <div id="aulasDisponiveis" class="aulas-grid"></div>
+      <div id="errorAulas" class="alert alert-danger" style="display: none;"></div>
+    </div>
+
+  </div>
+
+</section>
+
+<script src="/js/agendar-aulas.js"></script>
